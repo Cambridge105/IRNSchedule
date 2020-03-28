@@ -1,0 +1,118 @@
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user	command
+17 *	* * *	root    cd / && run-parts --report /etc/cron.hourly
+25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+#
+
+00 00	* * *	root	/usr/local/bin/purgeftp 2>&1 >/dev/null
+
+*/1 * * * *	root	exec /usr/local/bin/monitorstudio >>/tmp/monitorstudio.log 2>&1 &
+
+*/1 * * * *	root	exec /usr/local/bin/discspace 2>&1 >/dev/null &
+
+# Start remote stream
+# Minutes Hour Day Month *
+#59 06 15 02 *	root	/bin/echo -e "\r\nip-remote.start\r\n" | /bin/nc 127.0.0.1 9001 -w 1 >/dev/null
+#02 23 14 02 *	root	/bin/echo -e "\r\nip-remote.stop\r\n" | /bin/nc 127.0.0.1 9001 -w 1 >/dev/null
+
+30 17	* * *	root    /bin/rm -f /var/scratch/WEATHER/weather-now.mp3
+
+# IRN - remember this runs 10 minutes in the hour before
+# switchirn news weather toth2 irnaudio
+
+# Mon
+50 23-23 * * Sun	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 00-05 * * Mon	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 06-08 * * Mon	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 09-14 * * Mon	root	/usr/local/bin/switchirn on on on on 2>&1 >/dev/null
+50 15-17 * * Mon	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 18-18 * * Mon	root	/usr/local/bin/switchirn on on 2>&1 >/dev/null
+50 20-20 * * Mon	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 22-22 * * Mon	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+
+# Tue
+50 23-23 * * Mon	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 00-05 * * Tue	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 06-08 * * Tue	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 09-14 * * Tue	root	/usr/local/bin/switchirn on on on on 2>&1 >/dev/null
+50 15-17 * * Tue	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 18-18 * * Tue	root	/usr/local/bin/switchirn on on 2>&1 >/dev/null
+50 20-20 * * Tue	root	/usr/local/bin/switchirn on on 2>&1 >/dev/null
+50 22-22 * * Tue	root	/usr/local/bin/switchirn on on 2>&1 >/dev/null
+
+# Wed
+50 23-23 * * Tue	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 00-05 * * Wed	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 06-08 * * Wed	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 09-12 * * Wed	root	/usr/local/bin/switchirn on on on on 2>&1 >/dev/null
+50 13-14 * * Wed	root	/usr/local/bin/switchirn on on on on 2>&1 >/dev/null
+50 15-17 * * Wed	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 18-18 * * Wed	root	/usr/local/bin/switchirn on on  2>&1 >/dev/null
+50 20-20 * * Wed	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 21-21 * * Wed	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 22 8-14,22-28 * *  root [ `date +\%u` = 3 ] && /usr/local/bin/switchirn on off 2>&1 >/dev/null
+#50 23 8-14,22-28 * * root [ `date +\%u` = 3 ] && /usr/local/bin/switchirn on off 2>&1 >/dev/null
+
+
+# Thu
+50 23-23 * * Wed	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 00-05 * * Thu	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 06-08 * * Thu	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 09-12 * * Thu	root	/usr/local/bin/switchirn on on on on 2>&1 >/dev/null
+50 13-14 * * Thu	root	/usr/local/bin/switchirn on on on on 2>&1 >/dev/null
+50 15-17 * * Thu	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 18-18 * * Thu        root    /usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 20-20 * * Thu	root	/usr/local/bin/switchirn on on  2>&1 >/dev/null
+50 22-22 * * Thu	root	/usr/local/bin/switchirn on on 2>&1 >/dev/null
+
+
+# Fri
+50 23-23 * * Thu	root	/usr/local/bin/switchirn on on 2>&1 >/dev/null
+50 00-05 * * Fri	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 06-08 * * Fri	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 09-14 * * Fri	root	/usr/local/bin/switchirn on on on on 2>&1 >/dev/null
+50 15-17 * * Fri	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 18-18 * * Fri	root	/usr/local/bin/switchirn on on 2>&1 >/dev/null
+50 21-21 * * Fri	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+
+
+#Sat
+50 23-23 * * Fri	root	/usr/local/bin/switchirn on on 2>&1 >/dev/null
+50 00-06 * * Sat	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 09-10 * * Sat	root	/usr/local/bin/switchirn on on on on 2>&1 >/dev/null
+50 11-11 * * Sat	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 12-12 * * Sat	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 13-13 * * Sat	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 14-14 * * Sat	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 15-15 * * Sat	root	/usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 16-16 * * Sat	root	/usr/local/bin/switchirn on on on on 2>&1 >/dev/null
+50 17-17 * * Sat	root	/usr/local/bin/switchirn on off  2>&1 >/dev/null
+50 19-19 * * Sat	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 20-20 * * Sat	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 22-22 * * Sat	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+
+#Sun
+50 00-06 * * Sun        root    /usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 07-08 * * Sun        root    /usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 09-11 * * Sun        root    /usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 12-14 * * Sun        root    /usr/local/bin/switchirn on off on on 2>&1 >/dev/null
+50 16-16 * * Sun	root	/usr/local/bin/switchirn on off on on  2>&1 >/dev/null
+50 17-17 * * Sun	root	/usr/local/bin/switchirn on on on on  2>&1 >/dev/null
+50 18-18 * * Sun	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 19-19 * * Sun	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+50 20-20 * * Sun	root	/usr/local/bin/switchirn on off  2>&1 >/dev/null
+50 21-21 * * Sun	root	/usr/local/bin/switchirn on off  2>&1 >/dev/null
+50 22-22 * * Sun	root	/usr/local/bin/switchirn on off 2>&1 >/dev/null
+
+# 50 23-23 * * Tue	root	if [ -f /var/run/NEWSONWED ]; then /usr/local/bin/switchirn on;fi >/dev/null
+# 50 00-00 * * Wed	root	if [ -f /var/run/NEWSONWED ]; then rm /var/run/NEWSONWED; /usr/local/bin/switchirn on; else touch /var/run/NEWSONWED;fi > /dev/null
