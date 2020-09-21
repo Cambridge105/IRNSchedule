@@ -3,6 +3,8 @@ from datetime import datetime
 from datetime import timedelta
 from croniter import croniter
 from dateutil import rrule
+import config
+import os
 
 
 file = open('/home/pi/105irnschedule/irn.html', 'w')
@@ -30,7 +32,7 @@ for dt in rrule.rrule(rrule.HOURLY, dtstart=next_hour, until=sevenDaysLater):
     if (currentday != lastday):
         if (lastday != -1):
             file.write ("</tbody></table>\r\n")
-			hasToday = True
+            hasToday = True
         file.write ("<h2>" + hours.strftime("%a %d %b %Y") + "</h2>")
         file.write ("\r\n<table border=\"1\"><thead><tr><th>Hour</th><th>Schedule</tr></thead><tbody>")
     hasResult = False
@@ -52,27 +54,27 @@ for dt in rrule.rrule(rrule.HOURLY, dtstart=next_hour, until=sevenDaysLater):
                       rowclass="unknown"
 
     hoursStr = hours.strftime("%H:%M")
+    isNewIRNHour = True
     if (" on on " in hourCmd):
         hourCmd = "IRN, weather-next"
         rowclass = "irn"
-		if (hasToday == False):
-		    todayOutput = todayOutput + hoursStr + ", "
     if (" on off " in hourCmd):
         hourCmd = "IRN only"
         rowclass="irn" 
-		if (hasToday == False):
-		    todayOutput = todayOutput + hoursStr + ", "
     if (" on flp " in hourCmd):
         hourCmd = "IRN, weather-now"
         rowclass="irn"
-		if (hasToday == False):
-		    todayOutput = todayOutput + hoursStr + ", "
     if (minsOffset > 59):
         hourCmd = "-"
         rowclass="none"
+        isNewIRNHour = False
     file.write("<tr class=\"" + rowclass + "\"><td>"+ hoursStr+"</td><td>"+ hourCmd+"</td></tr>\r\n")
     lastday = hours.strftime("%w")
+    if (hasToday == False):
+        if (isNewIRNHour == True):
+            todayOutput = todayOutput + hoursStr + ", "
 file.write("</tbody></table>")
 print("Done")
-print(todayOutput)
+curlCmd = "curl -X POST -H 'Authorization: Bearer " + config.bearer + "' -H  'Content-type: application/json' --data '{\"channel\": \"" + config.channel + "\", \"text\": \"" + todayOutput +"\"}' https://slack.com/api/chat.postMessage"
+os.system(curlCmd)
 file.close()
