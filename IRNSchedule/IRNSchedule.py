@@ -40,6 +40,8 @@ for dt in rrule.rrule(rrule.HOURLY, dtstart=next_hour, until=sevenDaysLater):
     hourCmd = ""
     minsOffset = 0
     for job in my_user_cron:
+       if job.enabled == False:
+           continue
        if ("switchirn" in job.command):
            if (hasResult == False):
               sch = job.schedule(date_from=dt)
